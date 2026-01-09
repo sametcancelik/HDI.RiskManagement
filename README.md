@@ -1,6 +1,4 @@
-======================================================================
 🛡️ HDI RISK YONETIM & ANALIZ SISTEMI - README
-======================================================================
 
 1. PROJE OZETI
 ---------------
@@ -59,6 +57,4 @@ veya risk puanı hesaplar. Limit aşımlarını SignalR ile anlık bildirir.
 
 NOT: İncelerken ekstra efor sarf ettirmemesi için appsettings.json dosyaları repoya pushlanmıştır.
 
-----------------------------------------------------------------------
 HDI Risk Engine - 2026 | Safe & Fast Analysis
-======================================================================
