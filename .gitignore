@@ -13,10 +13,10 @@ obj/
 ## Logs
 *.log
 
-## Environment / Secrets
-appsettings.json
-appsettings.Development.json
-.env
+# ## Environment / Secrets
+# appsettings.json
+# appsettings.Development.json
+# .env
 
 ## OS
 .DS_Store

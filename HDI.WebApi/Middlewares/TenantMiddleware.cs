@@ -8,8 +8,8 @@ public class TenantMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context, IPartnerService partnerService, ICurrentTenantService currentTenantService)
     {
-        if (context.Request.Path.StartsWithSegments("/api/partners") && 
-        context.Request.Method == HttpMethods.Post)
+        if ((context.Request.Path.StartsWithSegments("/api/partners") && 
+        context.Request.Method == HttpMethods.Post) || context.Request.Path.StartsWithSegments("/risk-hub"))
         {
             await _next(context);
             return;

@@ -9,7 +9,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#btnRunAnalyze').click(function () {
+   $('#btnRunAnalyze').click(function () {
         const text = $('#txtDescription').val();
         const agreementId = $('#selAgreement').val();
 
@@ -18,14 +18,16 @@ $(document).ready(function () {
             return;
         }
 
-        $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Analiz Ediliyor...');
+        const $btn = $(this);
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>...');
+
 
         $.ajax({
-            url: `${API_CONFIG.baseUrl}/risk-analysis/analyze`,
+            url: `${API_CONFIG.baseUrl}/risk-analysis/analyze?agreementId=${parseInt(agreementId)}`,
             method: 'POST',
             contentType: 'application/json',
             headers: { 'X-Api-Key': API_CONFIG.key },
-            data: JSON.stringify({ agreementId: parseInt(agreementId), description: text }),
+            data: JSON.stringify(text), 
             success: (res) => {
                 $('#analysisResult').hide().fadeIn();
                 $('#resScore').text(res.data + " ₺");
@@ -34,11 +36,14 @@ $(document).ready(function () {
                 const isExceeded = res.message.includes("aşıldı");
                 $('#resBadge').text(isExceeded ? "LİMİT AŞILDI" : "GÜVENLİ")
                              .attr('class', isExceeded ? 'badge bg-danger' : 'badge bg-success');
-                $('#analysisResult').css('background', isExceeded ? '#fff5f5' : '#f0fff4')
-                                   .css('border', isExceeded ? '1px solid #feb2b2' : '1px solid #9ae6b4');
+                
+                $('#analysisResult').css('background', isExceeded ? '#fff5f5' : '#f0fff4');
+            },
+            error: (err) => {
+                Swal.fire('Hata', 'Backend parametreleri uyuşmadı veya yetki hatası.', 'error');
             },
             complete: () => {
-                $(this).prop('disabled', false).html('Analiz Et');
+                $btn.prop('disabled', false).html('Analiz Et');
             }
         });
     });

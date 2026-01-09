@@ -3,6 +3,7 @@ using HDI.Application.Interfaces;
 using HDI.Domain.Common;
 using HDI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HDI.Persistence.Contexts;
 
@@ -100,6 +101,7 @@ public class ApplicationDbContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedBy = currentUser;
+                    entry.Entity.CreatedDate = DateTime.Now;
 
                     ITenantEntity? tenantEntity = entry.Entity as ITenantEntity;
 

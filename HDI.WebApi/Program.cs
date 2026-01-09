@@ -4,7 +4,9 @@ using HDI.Persistence;
 using HDI.Persistence.Contexts;
 using HDI.WebAPI.Helpers;
 using HDI.WebAPI.Middlewares;
+using HDı.Infrastructure.Hubs;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +23,22 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.WithOrigins("http://localhost:5177") // WebUI adresin (tam olarak bu olmalı)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // SignalR için bu zorunludur
+    });
+});
+
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,13 +50,16 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
-
 app.UseMiddleware<ExceptionMiddleware>(); 
+
+app.UseRouting();
+
 app.UseMiddleware<TenantMiddleware>();
 
 app.UseAuthorization();
+
 app.MapControllers(); 
+app.MapHub<RiskHub>("/risk-hub");
 
 using (var scope = app.Services.CreateScope())
 {
@@ -55,7 +75,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Veritabanı migrate edilirken bir hata oluştu.");
+        logger.LogError(ex, "Migration error");
     }
 }
 

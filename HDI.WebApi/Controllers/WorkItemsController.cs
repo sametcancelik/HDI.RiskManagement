@@ -1,3 +1,4 @@
+using HDI.Application.DTOs.WorkItem;
 using HDI.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,13 @@ public class WorkItemsController(IWorkItemService workItemService) : BaseControl
     public async Task<IActionResult> GetById(int id)
     {
         var response = await workItemService.GetWorkItemByIdAsync(id);
+        return ActionResultInstance(response);
+    }
+
+    [HttpPost("filter")]
+    public async Task<IActionResult> GetFiltered([FromBody] WorkItemFilterRequest filter)
+    {
+        var response = await workItemService.GetFilteredWorkItemsAsync(filter);
         return ActionResultInstance(response);
     }
 }
