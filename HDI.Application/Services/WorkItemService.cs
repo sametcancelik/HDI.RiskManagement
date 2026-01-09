@@ -2,16 +2,18 @@ using AutoMapper;
 using HDI.Application.Common;
 using HDI.Application.DTOs.WorkItem;
 using HDI.Application.Exceptions;
+using HDI.Application.Interfaces;
 using HDI.Application.Interfaces.Persistence;
 using HDI.Application.Interfaces.Services;
 using HDI.Domain.Entities;
 
 namespace HDI.Application.Services;
 
-public class WorkItemService(IUnitOfWork unitOfWork, IMapper mapper) : IWorkItemService
+public class WorkItemService(IUnitOfWork unitOfWork, IMapper mapper, ICurrentTenantService currentTenantService) : IWorkItemService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentTenantService _currentTenantService = currentTenantService;
 
     public async Task<ApiResponse<List<WorkItemDto>>> GetWorkItemsByAgreementIdAsync(int agreementId)
     {
@@ -46,4 +48,22 @@ public class WorkItemService(IUnitOfWork unitOfWork, IMapper mapper) : IWorkItem
         var dto = _mapper.Map<WorkItemDto>(item);
         return ApiResponse<WorkItemDto?>.Success(dto);
     }
+
+    public async Task<ApiResponse<List<WorkItemDto>>> GetFilteredWorkItemsAsync(WorkItemFilterRequest filter)
+{
+    var tenantId = _currentTenantService.TenantId;
+
+    var workItems = await _unitOfWork.Repository<WorkItem, int>().GetAsync(
+        predicate: x => x.TenantId == tenantId &&
+            (!filter.AgreementId.HasValue || x.AgreementId == filter.AgreementId) &&
+            (!filter.StartDate.HasValue || x.CreatedDate >= filter.StartDate) &&
+            (!filter.EndDate.HasValue || x.CreatedDate <= filter.EndDate) &&
+            (!filter.MinAmount.HasValue || x.CalculatedRiskAmount >= filter.MinAmount) &&
+            (!filter.MaxAmount.HasValue || x.CalculatedRiskAmount <= filter.MaxAmount) &&
+            (!filter.IsLimitExceeded.HasValue || x.IsLimitExceeded == filter.IsLimitExceeded),
+        includes: x => x.Agreement
+    );
+
+    return ApiResponse<List<WorkItemDto>>.Success(_mapper.Map<List<WorkItemDto>>(workItems));
+}
 }

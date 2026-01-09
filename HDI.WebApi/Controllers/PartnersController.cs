@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HDI.WebApi.Controllers;
 
-public class PartnersController(IPartnerService partnerService) : BaseController
+public class PartnersController(IPartnerService _partnerService) : BaseController
 {
-    private readonly IPartnerService _partnerService = partnerService;
-
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePartnerRequest request)
     {

@@ -2,13 +2,19 @@ using HDI.Application.Common;
 using HDI.Application.Exceptions;
 using HDI.Application.Interfaces;
 using HDI.Application.Interfaces.Persistence;
+using HDI.Application.Interfaces.Services;
 using HDI.Domain.Entities;
 
 namespace HDI.Application.Services;
 
-public class RiskAnalysisService(IUnitOfWork unitOfWork) : IRiskAnalysisService
+public class RiskAnalysisService(
+    IUnitOfWork unitOfWork, 
+    ISignalRService signalRService, 
+    ICurrentTenantService currentTenantService) : IRiskAnalysisService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ISignalRService _signalRService = signalRService;
+    private readonly ICurrentTenantService _currentTenantService = currentTenantService;
 
     public async Task<ApiResponse<decimal>> AnalyzeAndSaveWorkItemAsync(int agreementId, string description)
     {
@@ -37,11 +43,25 @@ public class RiskAnalysisService(IUnitOfWork unitOfWork) : IRiskAnalysisService
             AgreementId = agreementId,
             Description = description,
             CalculatedRiskAmount = totalRiskScore,
-            IsLimitExceeded = totalRiskScore > agreement.RiskLimit
+            IsLimitExceeded = totalRiskScore > agreement.RiskLimit,
+            TenantId = _currentTenantService.TenantId ?? 0
         };
 
         await _unitOfWork.Repository<WorkItem, int>().AddAsync(workItem);
         await _unitOfWork.SaveAsync();
+
+        if (workItem.IsLimitExceeded)
+        {
+            var tenantId = _currentTenantService.TenantId.ToString();
+            
+            await _signalRService.SendRiskAlertAsync(tenantId, new
+            {
+                Title = "Yüksek Risk Uyarısı!",
+                Description = workItem.Description,
+                Score = workItem.CalculatedRiskAmount,
+                Limit = agreement.RiskLimit
+            });
+        }
 
         string statusMessage = workItem.IsLimitExceeded 
             ? "Analiz tamamlandı: Risk limiti aşıldı!" 

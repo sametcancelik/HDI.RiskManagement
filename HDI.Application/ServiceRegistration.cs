@@ -18,5 +18,5 @@ public static class ServiceRegistration
         services.AddScoped<IKeywordService, KeywordService>();
         services.AddScoped<IWorkItemService, WorkItemService>();
         services.AddScoped<IRiskAnalysisService, RiskAnalysisService>();
-    }
+        services.AddScoped<IDashboardService, DashboardService>();}
 }

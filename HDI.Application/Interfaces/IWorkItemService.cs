@@ -8,4 +8,5 @@ public interface IWorkItemService
     Task<ApiResponse<List<WorkItemDto>>> GetWorkItemsByAgreementIdAsync(int agreementId);
     Task<ApiResponse<List<WorkItemDto>>> GetExceededWorkItemsAsync();
     Task<ApiResponse<WorkItemDto?>> GetWorkItemByIdAsync(int id);
+    Task<ApiResponse<List<WorkItemDto>>> GetFilteredWorkItemsAsync(WorkItemFilterRequest filter);
 }

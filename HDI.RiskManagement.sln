@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDI.WebApi", "HDI.WebApi\HD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDı.Infrastructure", "HDı.Infrastructure\HDı.Infrastructure.csproj", "{6EA16304-D7DD-4D0C-AD71-7046784E7194}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDI.WebUI", "HDI.WebUI\HDI.WebUI.csproj", "{849BB36D-8E87-4980-AA3E-28413ABA9610}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{6EA16304-D7DD-4D0C-AD71-7046784E7194}.Release|x64.Build.0 = Release|Any CPU
 		{6EA16304-D7DD-4D0C-AD71-7046784E7194}.Release|x86.ActiveCfg = Release|Any CPU
 		{6EA16304-D7DD-4D0C-AD71-7046784E7194}.Release|x86.Build.0 = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|x64.Build.0 = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Debug|x86.Build.0 = Debug|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|x64.ActiveCfg = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|x64.Build.0 = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|x86.ActiveCfg = Release|Any CPU
+		{849BB36D-8E87-4980-AA3E-28413ABA9610}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

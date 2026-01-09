@@ -8,10 +8,14 @@ using HDI.Domain.Entities;
 
 namespace HDI.Application.Services;
 
-public class AgreementService(IUnitOfWork unitOfWork, IMapper mapper) : IAgreementService
+public class AgreementService(
+    IUnitOfWork unitOfWork, 
+    IMapper mapper, 
+    ICurrentTenantService currentTenantService) : IAgreementService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentTenantService _currentTenantService = currentTenantService;
 
     public async Task<ApiResponse<List<AgreementDto>>> GetAllAgreementsAsync()
     {
@@ -27,7 +31,7 @@ public class AgreementService(IUnitOfWork unitOfWork, IMapper mapper) : IAgreeme
             .GetFirstOrDefaultAsync(x => x.Id == id, true, x => x.Keywords);
 
         if (agreement == null)
-            throw new BusinessException("Anlaşma bulunamadı.", 404); // throw kullanımı
+            throw new BusinessException("Anlaşma bulunamadı.", 404);
 
         var dto = _mapper.Map<AgreementDto>(agreement);
         return ApiResponse<AgreementDto?>.Success(dto);
@@ -35,13 +39,16 @@ public class AgreementService(IUnitOfWork unitOfWork, IMapper mapper) : IAgreeme
 
     public async Task<ApiResponse> CreateAgreementAsync(CreateAgreementRequest request)
     {
+        var tenantId = _currentTenantService.TenantId;
+
         var hasActiveAgreement = await _unitOfWork.Repository<Agreement, int>()
-            .AnyAsync(a => !a.IsDeleted);
+            .AnyAsync(a => a.TenantId == tenantId && !a.IsDeleted);
 
         if (hasActiveAgreement)
-            throw new BusinessException("Bu iş ortağının zaten aktif bir anlaşması bulunmaktadır."); // Default 400 döner
+            throw new BusinessException("Bu iş ortağının zaten aktif bir anlaşması bulunmaktadır.");
 
         var agreement = _mapper.Map<Agreement>(request);
+        agreement.TenantId = tenantId ?? throw new BusinessException("Partner kimliği doğrulanamadı.");
 
         await _unitOfWork.Repository<Agreement, int>().AddAsync(agreement);
         await _unitOfWork.SaveAsync();

@@ -10,6 +10,7 @@ public static class ServiceRegistration
     {
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentTenantService, CurrentTenantService>();
+        services.AddScoped<ISignalRService, SignalRService>();
         return services;
     }
 }

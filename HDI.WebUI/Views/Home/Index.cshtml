@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Genel Bakış";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Risk Dashboard</h2>
+            <p class="text-muted">Anlık partner verileri ve risk istatistikleri.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-left: 5px solid #4e73df !important;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Toplam Analiz</div>
+                        <h3 id="totalWorkItems" class="mb-0 fw-bold text-gray-800">0</h3>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-left: 5px solid #e74a3b !important;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Limit Aşımı</div>
+                        <h3 id="exceededCount" class="mb-0 fw-bold text-gray-800">0</h3>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3" style="border-left: 5px solid #1cc88a !important;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ort. Risk Skoru</div>
+                        <h3 id="avgRisk" class="mb-0 fw-bold text-gray-800">0</h3>
+                    </div>
+                    <div class="col-auto"><i class="fas fa-chart-line fa-2x text-gray-300"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts { <script src="~/js/dashboard.js"></script> }

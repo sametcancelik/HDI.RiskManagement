@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Risk Analizi";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-search-plus text-primary me-2"></i>Yeni Analiz Başlat</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Anlaşma Seçimi</label>
+                        <select id="selAgreement" class="form-select form-select-lg">
+                            <option value="">Lütfen Anlaşma Seçin...</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Analiz Edilecek Açıklama</label>
+                        <textarea id="txtDescription" class="form-control" rows="8" placeholder="Örn: Bu poliçe kapsamında yangın ve sel hasarı oluşmuştur..."></textarea>
+                    </div>
+                    <button id="btnRunAnalyze" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">
+                        Analiz Et ve Kaydet
+                    </button>
+
+                    <div id="analysisResult" class="mt-4 p-4 rounded-3 border" style="display:none;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="text-muted text-uppercase small fw-bold">Hesaplanan Risk Tutarı</h6>
+                                <h1 id="resScore" class="display-4 fw-bold mb-0">0</h1>
+                            </div>
+                            <span id="resBadge" class="badge rounded-pill fs-6 px-4 py-2"></span>
+                        </div>
+                        <hr>
+                        <p id="resMsg" class="mb-0 lead"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts { <script src="~/js/analysis.js"></script> }

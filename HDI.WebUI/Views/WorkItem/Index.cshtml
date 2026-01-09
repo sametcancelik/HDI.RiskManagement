@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Geçmiş Analizler";
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-history text-secondary me-2"></i>Analiz Geçmişi</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-2 mb-4 bg-light p-3 rounded shadow-sm">
+            <div class="col-md-3">
+                <label class="small fw-bold">Başlangıç</label>
+                <input type="date" id="fStart" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label class="small fw-bold">Bitiş</label>
+                <input type="date" id="fEnd" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="small fw-bold">Durum</label>
+                <select id="fExceeded" class="form-select">
+                    <option value="">Tüm Analizler</option>
+                    <option value="true">Limit Aşanlar (Kritik)</option>
+                    <option value="false">Limit Altında (Güvenli)</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="btnFilter" class="btn btn-dark w-100">Filtre Uygula</button>
+            </div>
+        </div>
+
+        <table class="table table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tarih / Saat</th>
+                    <th style="width: 40%;">Açıklama</th>
+                    <th>Risk Skoru</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody id="workItemsBody"></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts { <script src="~/js/workitems.js"></script> }
