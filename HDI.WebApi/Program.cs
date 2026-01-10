@@ -27,10 +27,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:5177") // WebUI adresin (tam olarak bu olmalı)
+        policy.WithOrigins("http://localhost:5177") 
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .AllowCredentials(); // SignalR için bu zorunludur
+              .AllowCredentials();
     });
 });
 
