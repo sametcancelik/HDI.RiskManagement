@@ -9,7 +9,7 @@ veya risk puanı hesaplar. Limit aşımlarını SignalR ile anlık bildirir.
 
 2. TEKNIK MIMARI
 -----------------
-* Backend: .NET 8.0 Web API
+* Backend: .NET 10.0 Web API
 * Frontend: ASP.NET Core MVC (jQuery & Bootstrap 5)
 * Real-time: SignalR (WebSocket)
 * DB: Entity Framework Core (SQL Server)
@@ -31,11 +31,11 @@ veya risk puanı hesaplar. Limit aşımlarını SignalR ile anlık bildirir.
    dotnet ef database update --project HDI.Persistence --startup-project HDI.WebAPI
 
 2) Backend Başlatma:
-   cd HDI.WebAPI
+   dotnet run --project ./HDI.WebApi
    dotnet run (Varsayılan Port: 1907)
 
 3) Frontend Başlatma:
-   cd HDI.WebUI
+   dotnet run --project ./HDI.WebUI
    dotnet run (Varsayılan Port: 5177)
 
 5. KULLANIM VE TEST (USER GUIDE)
