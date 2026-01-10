@@ -3,7 +3,7 @@ using HDI.Application.Interfaces;
 using HDI.Domain.Common;
 using HDI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using HDI.Domain.Common.Helpers;
 
 namespace HDI.Persistence.Contexts;
 
@@ -38,6 +38,7 @@ public class ApplicationDbContext : DbContext
         }
 
         var seedDate = new DateTime(2024, 1, 1);
+        var hashedSecret = HashHelper.ComputeSha256Hash("hdi-secret-789");
 
         modelBuilder.Entity<Partner>().HasData(
             new Partner
@@ -45,6 +46,7 @@ public class ApplicationDbContext : DbContext
                 Id = 1,
                 Name = "HDI Sigorta A.Ş.",
                 ApiKey = "hdi-test-key-123",
+                ApiSecret = hashedSecret,
                 IsActive = true,
                 CreatedBy = "System",
                 CreatedDate = seedDate
@@ -103,9 +105,7 @@ public class ApplicationDbContext : DbContext
                     entry.Entity.CreatedBy = currentUser;
                     entry.Entity.CreatedDate = DateTime.Now;
 
-                    ITenantEntity? tenantEntity = entry.Entity as ITenantEntity;
-
-                    if (tenantEntity != null && currentTenantId.HasValue)
+                    if (entry.Entity is ITenantEntity tenantEntity && currentTenantId.HasValue)
                     {
                         tenantEntity.TenantId = currentTenantId.Value;
                     }
@@ -131,14 +131,10 @@ public class ApplicationDbContext : DbContext
     private LambdaExpression GetTenantFilter(Type type)
     {
         var parameter = Expression.Parameter(type, "e");
-
         var left = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
-
         var tenantIdProperty = Expression.Property(Expression.Constant(_currentTenantService),
             nameof(ICurrentTenantService.TenantId));
-
         var leftConverted = Expression.Convert(left, typeof(int?));
-
         var comparison = Expression.Equal(leftConverted, tenantIdProperty);
 
         return Expression.Lambda(comparison, parameter);

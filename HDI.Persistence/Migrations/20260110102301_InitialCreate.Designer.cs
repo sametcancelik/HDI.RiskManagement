@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HDI.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260109205802_InitialCreate")]
+    [Migration("20260110102301_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace HDI.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)
@@ -71,6 +74,18 @@ namespace HDI.Persistence.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Agreements");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedBy = "System",
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            RiskLimit = 150m,
+                            TenantId = 1,
+                            Title = "Kasko Risk Analizi"
+                        });
                 });
 
             modelBuilder.Entity("HDI.Domain.Entities.Keyword", b =>
@@ -87,6 +102,9 @@ namespace HDI.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)
@@ -122,6 +140,30 @@ namespace HDI.Persistence.Migrations
                     b.HasIndex("AgreementId");
 
                     b.ToTable("Keywords");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AgreementId = 1,
+                            CreatedBy = "System",
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            RiskWeight = 80m,
+                            TenantId = 1,
+                            Word = "kaza"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AgreementId = 1,
+                            CreatedBy = "System",
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            RiskWeight = 40m,
+                            TenantId = 1,
+                            Word = "sel"
+                        });
                 });
 
             modelBuilder.Entity("HDI.Domain.Entities.Partner", b =>
@@ -137,8 +179,36 @@ namespace HDI.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("ApiSecret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -148,6 +218,19 @@ namespace HDI.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Partners");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApiKey = "hdi-test-key-123",
+                            ApiSecret = "ILaRM6hng9E0orD3383lDtZ7wgqswJ2+Jn49wBvZQg8=",
+                            CreatedBy = "System",
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "HDI Sigorta A.Ş."
+                        });
                 });
 
             modelBuilder.Entity("HDI.Domain.Entities.WorkItem", b =>
@@ -168,6 +251,9 @@ namespace HDI.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)

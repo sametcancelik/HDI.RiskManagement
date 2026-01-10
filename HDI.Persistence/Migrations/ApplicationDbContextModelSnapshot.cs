@@ -176,6 +176,10 @@ namespace HDI.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("ApiSecret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -217,6 +221,7 @@ namespace HDI.Persistence.Migrations
                         {
                             Id = 1,
                             ApiKey = "hdi-test-key-123",
+                            ApiSecret = "ILaRM6hng9E0orD3383lDtZ7wgqswJ2+Jn49wBvZQg8=",
                             CreatedBy = "System",
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,

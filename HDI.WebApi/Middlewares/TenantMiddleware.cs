@@ -8,22 +8,23 @@ public class TenantMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context, IPartnerService partnerService, ICurrentTenantService currentTenantService)
     {
-        if ((context.Request.Path.StartsWithSegments("/api/partners") && 
-        context.Request.Method == HttpMethods.Post) || context.Request.Path.StartsWithSegments("/risk-hub"))
+        if ((context.Request.Path.StartsWithSegments("/api/partners") && context.Request.Method == HttpMethods.Post) || 
+        context.Request.Path.StartsWithSegments("/risk-hub") ||
+        context.Request.Path.StartsWithSegments("/api/auth/login"))
         {
             await _next(context);
             return;
         }
 
-        if (!context.Request.Headers.TryGetValue("X-Api-Key", out var apiKey))
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("API Key eksik!");
-            return;
-        }
+        if (!context.Request.Headers.TryGetValue("X-Api-Key", out var apiKey) || 
+        !context.Request.Headers.TryGetValue("X-Api-Secret", out var apiSecret))
+    {
+        context.Response.StatusCode = 401;
+        await context.Response.WriteAsJsonAsync(new { message = "Eksik Kimlik Bilgileri!" });
+        return;
+    }
 
-        var partner = await partnerService.GetPartnerByApiKeyAsync(apiKey!);
-
+        var partner = await partnerService.GetPartnerByApiKeyAsync(apiKey!, apiSecret!);
         if (partner == null || !partner.Data.IsActive)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;

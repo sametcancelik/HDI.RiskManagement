@@ -1,60 +1,50 @@
-🛡️ HDI RISK YONETIM & ANALIZ SISTEMI - README
+🛡️ HDI Risk Yönetim & Analiz Sistemi
+Bu sistem, sigorta poliçeleri ve iş süreçlerindeki risk faktörlerini dinamik olarak analiz etmek amacıyla geliştirilmiş, Multi-Tenant yapıda çalışan bir Risk Engine uygulamasıdır. Metin tabanlı açıklamaları tarayarak, tanımlı riskli kelimeler üzerinden bir maliyet veya risk puanı hesaplar ve limit aşımlarını anlık olarak bildirir.
 
-1. PROJE OZETI
----------------
-Bu sistem, sigorta poliçeleri ve iş süreçlerindeki risk faktörlerini 
-dinamik olarak analiz etmek için geliştirilmiştir. Metin tabanlı 
-açıklamaları tarayarak, tanımlı riskli kelimeler üzerinden bir maliyet 
-veya risk puanı hesaplar. Limit aşımlarını SignalR ile anlık bildirir.
+🚀 Teknik Mimari
+Backend: .NET 10.0 Web API
+Frontend: ASP.NET Core MVC (jQuery & Bootstrap 5)
+Real-time: SignalR (WebSocket)
+Veritabanı: Entity Framework Core (SQL Server)
+Güvenlik: X-Api-Key & X-Api-Secret tabanlı, SHA256 Hash doğrulamalı Multi-Tenant Middleware
+📂 Katmanlı Mimari (Project Structure)
+HDI.Domain: Temel varlıklar (Entities) ve Interface'ler.
+HDI.Application: İş mantığı, DTO'lar, Service arayüzleri ve Mapping.
+HDI.Infrastructure: SignalR Hub yapısı ve harici servis entegrasyonları.
+HDI.Persistence: DbContext, Repository implementasyonları ve Migration yönetimi.
+HDI.WebAPI: REST Controller'lar ve Tenant doğrulama katmanı.
+HDI.WebUI: Kullanıcı arayüzü, JavaScript ve AJAX tabanlı API iletişimi.
+🛠️ Kurulum ve Çalıştırma
+1. Veritabanı ve Migration
+Sistem, SeedData içinde bir adet test partneri (HDI Sigorta) barındırır. Veritabanını oluşturmak ve tabloları ilklendirmek için:
 
-2. TEKNIK MIMARI
------------------
-* Backend: .NET 10.0 Web API
-* Frontend: ASP.NET Core MVC (jQuery & Bootstrap 5)
-* Real-time: SignalR (WebSocket)
-* DB: Entity Framework Core (SQL Server)
-* Guvenlik: X-Api-Key tabanlı Multi-Tenant Middleware
+Bash
+# HDI.Persistence katmanına giderek veya ana dizinden:
+dotnet ef database update --project HDI.Persistence --startup-project HDI.WebAPI
+2. Projeleri Başlatma
+Önce API projesini, ardından UI projesini başlatın:
 
-3. KATMANLAR (PROJECT STRUCTURE)
----------------------------------
-- HDI.Domain: Temel varlıklar (Entities) ve Interface'ler.
-- HDI.Application: İş mantığı, DTO'lar ve Service arayüzleri.
-- HDI.Infrastructure: SignalR Hub yapısı ve servisleri.
-- HDI.Persistence: DbContext, Migration ve Repository sınıfları.
-- HDI.WebAPI: REST Controller'lar, CORS ve Tenant yönetim katmanı.
-- HDI.WebUI: Kullanıcı arayüzü, JavaScript ve AJAX yönetimi.
+Bash
+# Web API Başlatma (Varsayılan Port: 1907)
+dotnet run --project ./HDI.WebAPI
 
-4. KURULUM (INSTALLATION)
---------------------------
-1) Veritabanı Oluşturma:
-   Terminalde projeyi açın ve şu komutu çalıştırın:
-   dotnet ef database update --project HDI.Persistence --startup-project HDI.WebAPI
+# Web UI Başlatma (Varsayılan Port: 5177)
+dotnet run --project ./HDI.WebUI
+🔐 Güvenlik ve Giriş Bilgileri
+Sistem Multi-Tenant yapıda olduğu için her partner kendi Key ve Secret ikilisiyle giriş yapmalıdır. Giriş anında Secret bilgisi SHA256 ile hashlenerek veritabanında doğrulanır.
 
-2) Backend Başlatma:
-   dotnet run --project ./HDI.WebApi
-   dotnet run (Varsayılan Port: 1907)
-
-3) Frontend Başlatma:
-   dotnet run --project ./HDI.WebUI
-   dotnet run (Varsayılan Port: 5177)
-
-5. KULLANIM VE TEST (USER GUIDE)
----------------------------------
-- DASHBOARD: Anlık limit aşım bildirimlerini sağ üstte görüntüler.
-- ANLASMALAR: Anlaşmaları listeler. "Kelime Ekle" butonu ile poliçeye 
-  özel riskli kelimeler (örn: "Yangın", "Hasar") ve ağırlık puanları eklenir.
-- RISK ANALIZI: Bir anlaşma seçilir ve açıklama metni girilir. Analiz 
-  sonucunda risk tutarı hesaplanır. Eğer tutar anlaşma limitini aşarsa 
-  SignalR üzerinden tüm açık dashboard'lara uyarı gider.
-- ANALIZ GECMISI: Yapılan tüm analizler tarih ve limit durumuna göre 
-  burada listelenir.
-
-6. ONEMLI BAGIMLILIKLAR
-------------------------
-- SweetAlert2 (Bildirimler için)
-- FontAwesome (İkonlar için)
-- SignalR JS Client (Anlık haberleşme için)
-
-NOT: İncelerken ekstra efor sarf ettirmemesi için appsettings.json dosyaları repoya pushlanmıştır.
+Örnek Test Bilgileri (Seed Data):
+API Key: hdi-test-key-123
+API Secret: hdi-secret-789
+📋 Kullanım Rehberi
+Giriş (Login): Partner bilgileriyle sisteme giriş yapıldığında, X-Api-Key ve X-Api-Secret bilgileri sessionStorage üzerinde saklanır ve tüm API isteklerine otomatik eklenir.
+Dashboard: Anlık risk analiz sonuçlarını ve limit aşımlarını SignalR üzerinden real-time takip eder.
+Anlaşmalar: Poliçe türlerine göre risk limitleri belirlenir ve "Kelime Ekle" butonu ile riskli kelimelere (örn: "Yangın", "Hasar") ağırlık puanları atanır.
+Risk Analizi: Metin girişi yapıldığında sistem kelimeleri tarar, toplam risk puanını hesaplar ve limit aşımı durumunda dashboard'lara anlık uyarı gönderir.
+📦 Önemli Bağımlılıklar
+SweetAlert2: Şık ve interaktif bildirimler için.
+SignalR JS Client: WebSocket üzerinden anlık haberleşme.
+FontAwesome: Profesyonel ikon seti.
+NOT: Hızlı test edilebilmesi için appsettings.json dosyaları ve gerekli tüm veritabanı bağlantı ayarları proje dosyalarına dahil edilmiştir.
 
 HDI Risk Engine - 2026 | Safe & Fast Analysis

@@ -53,8 +53,10 @@ public class RiskAnalysisService(
         if (workItem.IsLimitExceeded)
         {
             var tenantId = _currentTenantService.TenantId.ToString();
-            
-            await _signalRService.SendRiskAlertAsync(tenantId, new
+            if  (tenantId == null)
+                throw new BusinessException("Tenant bilgisi alınamadı.", 500);
+
+            await _signalRService.SendRiskAlertAsync(tenantId ?? "", new
             {
                 Title = "Yüksek Risk Uyarısı!",
                 Description = workItem.Description,

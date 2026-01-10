@@ -1,4 +1,5 @@
 using HDI.Application.DTOs.Partner;
+using HDI.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HDI.WebApi.Controllers;
@@ -16,13 +17,6 @@ public class PartnersController(IPartnerService _partnerService) : BaseControlle
     public async Task<IActionResult> GetAll()
     {
         var response = await _partnerService.GetAllPartnersAsync();
-        return ActionResultInstance(response);
-    }
-
-    [HttpGet("validate/{apiKey}")]
-    public async Task<IActionResult> Validate(string apiKey)
-    {
-        var response = await _partnerService.GetPartnerByApiKeyAsync(apiKey);
         return ActionResultInstance(response);
     }
 }
