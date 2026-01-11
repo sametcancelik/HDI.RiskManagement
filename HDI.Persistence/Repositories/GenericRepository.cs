@@ -28,7 +28,6 @@ public class GenericRepository<T, TId>(ApplicationDbContext context) : IGenericR
 
         if (disableTracking) query = query.AsNoTracking();
 
-        // Include'ları Query'ye ekleme (En sık hata yapılan yer)
         if (includes != null)
         {
             query = includes.Aggregate(query, (current, include) => current.Include(include));
