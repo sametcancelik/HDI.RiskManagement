@@ -1,4 +1,3 @@
-// HDI.Persistence/ServiceRegistration.cs
 using HDI.Application.Interfaces.Persistence;
 using HDI.Application.Interfaces.Persistence.Repositories;
 using HDI.Persistence.Contexts;
